@@ -1,0 +1,27 @@
+{
+    "name": "rithis-stack",
+    "version": "0.0.1",
+    "description": "Our web stack: express, mongoose, rithis-crud",
+    "keywords": ["web", "stack", "express", "mongoose", "crud"],
+    "author": {
+        "name": "Vyacheslav Slinko",
+        "email": "vyacheslav.slinko@gmail.com"
+    },
+    "main": "stack",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rithis/node-rithis-stack"
+    },
+    "dependencies": {
+        "async": "~0.1",
+
+        "express": "~3.1",
+        "mongoose": "~3.4",
+        "rithis-crud": "~0.0",
+
+        "jade-static": "git://github.com/vslinko/jade-static.git#master",
+        "connect-coffee-script": "~0.1",
+        "stylus": "~0.32",
+        "bower": "~0.6"
+    }
+}
