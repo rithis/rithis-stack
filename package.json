@@ -1,6 +1,6 @@
 {
     "name": "rithis-stack",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Our web stack: express, mongoose, rithis-crud",
     "keywords": ["web", "stack", "express", "mongoose", "crud"],
     "author": {

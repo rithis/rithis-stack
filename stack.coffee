@@ -38,6 +38,7 @@ module.exports.configure = (directory, name, configurator) ->
     # startup
     componentsSource = path.join directory, 'component.json'
     componentsDestination = path.join publicDirectory, 'component.json'
+    componentsDirectory = path.join publicDirectory, 'components'
 
     bowerTasks = [
         # link components config
@@ -64,6 +65,18 @@ module.exports.configure = (directory, name, configurator) ->
         (callback) ->
             console.log "#{name} unlinking components.json"
             fs.unlink componentsDestination, callback
+
+        # set right modification time
+        (callback) ->
+            fs.stat componentsDirectory, (err, stats) ->
+                callback(err, stats.atime)
+
+        (atime, callback) ->
+            fs.stat componentsSource, (err, stats) ->
+                callback(err, atime, stats.mtime)
+
+        (atime, mtime, callback) ->
+            fs.utimes componentsDirectory, atime, mtime, callback
     ]
 
     setupTasks = [
@@ -74,8 +87,15 @@ module.exports.configure = (directory, name, configurator) ->
 
         # install components via bower
         (callback) ->
+            if fs.existsSync componentsDirectory
+                fileStats = fs.statSync componentsSource
+                directoryStats = fs.statSync componentsDirectory
+
+                if fileStats.mtime <= directoryStats.mtime
+                    return callback()
+
             console.log "#{name} installing components"
-            async.series bowerTasks, callback
+            async.waterfall bowerTasks, callback
     ]
 
     async.series [
