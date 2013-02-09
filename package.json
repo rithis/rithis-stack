@@ -1,6 +1,6 @@
 {
     "name": "rithis-stack",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Our web stack: express, mongoose, rithis-crud",
     "keywords": ["web", "stack", "express", "mongoose", "crud"],
     "author": {
@@ -22,6 +22,7 @@
         "jade-static": "git://github.com/vslinko/jade-static.git#master",
         "connect-coffee-script": "~0.1",
         "stylus": "~0.32",
+        "nib": "~0.9",
         "bower": "~0.6"
     }
 }

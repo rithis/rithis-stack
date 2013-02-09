@@ -8,13 +8,22 @@ path = require 'path'
 fs = require 'fs'
 
 coffeescript = require 'connect-coffee-script'
-stylus = require('stylus').middleware
+stylus = require 'stylus'
+nib = require 'nib'
 jade = require 'jade-static'
 
 
 module.exports.configure = (directory, name, configurator) ->
     # path to public directory
     publicDirectory = path.join directory, 'public'
+
+    # stylus
+    compilerFactory = (str, path) ->
+        compiler = stylus str
+        compiler.set 'filename', path
+        compiler.set 'compress', false
+        compiler.use nib()
+        compiler.import 'nib'
 
     # application
     app = express()
@@ -23,9 +32,9 @@ module.exports.configure = (directory, name, configurator) ->
         app.use express.logger()
         app.use express.json()
 
-        app.use jade publicDirectory
-        app.use coffeescript publicDirectory
-        app.use stylus publicDirectory
+        app.use jade src: publicDirectory
+        app.use coffeescript src: publicDirectory
+        app.use stylus.middleware src: publicDirectory, compile: compilerFactory
         app.use express.static publicDirectory
 
     app.configure 'development', ->
