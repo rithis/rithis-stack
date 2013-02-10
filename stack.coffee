@@ -10,6 +10,7 @@ fs = require 'fs'
 coffeescript = require 'connect-coffee-script'
 stylus = require 'stylus'
 nib = require 'nib'
+responsive = require 'stylus-responsive'
 jade = require 'jade-static'
 
 
@@ -23,7 +24,9 @@ module.exports.configure = (directory, name, configurator) ->
         compiler.set 'filename', path
         compiler.set 'compress', false
         compiler.use nib()
+        compiler.use responsive
         compiler.import 'nib'
+        compiler.import 'responsive'
 
     # application
     app = express()
