@@ -1,3 +1,7 @@
+crypto = require "crypto"
+path = require "path"
+
+
 module.exports = (stack, callback) ->
     stack.app.get "/files/:filename", (req, res) ->
         gs = new stack.mongodb.GridStore stack.connection.db, req.params.filename, "r"
@@ -21,32 +25,38 @@ module.exports = (stack, callback) ->
 
 
     stack.app.post "/files", (req, res) ->
-        unless req.files.file and req.body.filename
+        unless req.files.file
             return res.send 400
 
-        metadata = {}
-        for key, value of req.body
-            unless key is "filename" or key is "content-type"
-                metadata[key] = value
-
-        gs = new stack.mongodb.GridStore stack.connection.db, req.body.filename, "w",
-            content_type: req.body["content-type"] or "binary/octet-stream"
-            metadata: metadata
-
-        gs.open (err) ->
+        crypto.randomBytes 64, (err, buffer) ->
             if err
                 return res.send 500
 
-            if gs.length > 0
-                return gs.close ->
-                    res.send 409
+            filename = buffer.toString("hex") + path.extname(req.files.file.name)
 
-            gs.writeFile req.files.file.path, (err) ->
-                gs.close ->
-                    if err
-                        return res.send 500
+            metadata = {}
+            for key, value of req.body
+                metadata[key] = value
 
-                    res.send 201
+            gs = new stack.mongodb.GridStore stack.connection.db, filename, "w",
+                content_type: req.files.file.type
+                metadata: metadata
+
+            gs.open (err) ->
+                if err
+                    return res.send 500
+
+                if gs.length > 0
+                    return gs.close ->
+                        res.send 409
+
+                gs.writeFile req.files.file.path, (err) ->
+                    gs.close ->
+                        if err
+                            return res.send 500
+
+                        res.set "Location", "/files/#{filename}"
+                        res.send 201
 
 
     callback()
