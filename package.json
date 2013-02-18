@@ -23,6 +23,9 @@
         "mongoose": "~3.4",
         "stylus": "~0.32",
         "bower": "~0.6",
-        "nib": "~0.9"
+        "nib": "~0.9",
+        "sechash": "~0.2.1",
+        "expires": "0.0.0",
+        "json-output": "0.0.1"
     }
 }

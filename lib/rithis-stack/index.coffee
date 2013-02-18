@@ -35,8 +35,9 @@ defaultStack = (directory, name, plugin) ->
 
     stack.plugins.push plugins.assets
     stack.plugins.push plugins.bower
-    stack.plugins.push plugins.crud
     stack.plugins.push plugins.mongoose
+    stack.plugins.push plugins.auth
+    stack.plugins.push plugins.crud
     stack.plugins.push plugin
 
 

@@ -1,4 +1,5 @@
 module.exports.assets = require "./assets"
+module.exports.auth = require "./auth"
 module.exports.bower = require "./bower"
 module.exports.crud = require "./crud"
 module.exports.files = require "./files"
